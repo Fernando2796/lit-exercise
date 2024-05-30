@@ -7,6 +7,16 @@ class CardView extends LitElement {
     };
   }
 
+  addFavorite() {
+    this.dispatchEvent(
+      new CustomEvent("add-favorite", {
+        detail: { character: this.character },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
   static get styles() {
     return css`
       div {
@@ -45,6 +55,7 @@ class CardView extends LitElement {
           <img src=${this.character.image} />
         </figure>
         <h3>${this.character.name}</h3>
+        <button @click=${this.addFavorite}>Agregar a favoritos</button>
       </div>
     `;
   }

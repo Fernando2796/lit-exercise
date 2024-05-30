@@ -26,6 +26,7 @@ class HomePage extends LitElement {
   static get properties() {
     return {
       rickAndMortyData: { type: Array },
+      favoriteList: { type: Array },
     };
   }
   async getDataApi() {
@@ -37,6 +38,27 @@ class HomePage extends LitElement {
   constructor() {
     super();
     this.rickAndMortyData = [];
+    this.favoriteList = [];
+  }
+
+  existCharacterInListFavorite(id) {
+    return this.favoriteList.some((character) => character.id === id);
+  }
+
+  addCharacterToLisFavoriteList(event) {
+    if (!this.existCharacterInListFavorite(event.detail.character.id)) {
+      this.favoriteList = [...this.favoriteList, event.detail.character];
+    }
+
+    console.log(event.detail.character.id);
+
+    // const character = event.detail.character;
+    // const isFavorite = this.favorites.includes(character);
+    // if (isFavorite) {
+    //   this.favorites = this.favorites.filter(fav => fav !== character);
+    // } else {
+    //   this.favorites = [...this.favorites, character];
+    // }
   }
 
   render() {
@@ -44,8 +66,19 @@ class HomePage extends LitElement {
       <div>
         <h1>Rick and Morty</h1>
         ${this.rickAndMortyData.map(
-          (character) => html`<card-view .character=${character}></card-view>`
+          (character) =>
+            html`<card-view
+              .character=${character}
+              @add-favorite=${this.addCharacterToLisFavoriteList}
+            ></card-view>`
         )}
+
+        <div>
+          ${this.favoriteList.map(
+            (character) =>
+              html` <card-view .character=${character}></card-view> `
+          )}
+        </div>
       </div>
     `;
   }
